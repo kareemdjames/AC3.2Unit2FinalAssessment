@@ -10,22 +10,16 @@ import UIKit
 
 class CrayonTableViewController: UITableViewController {
 
-    var crayonData: [Crayon]?
-    let rawCrayonData: [[String : String]] = crayolaColors
-    let cellIdentifier: String = "crayonCell"
+    var crayons: [Crayon] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Test"
         
-        var crayons: [Crayon] = []
         for c in crayolaColors {
             if let crayon = Crayon(fromDict: c) {
                 crayons.append(crayon)
             }
         }
-        crayonData = crayons
-    
     }
 
 
@@ -38,7 +32,7 @@ class CrayonTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return self.crayonData?.count ?? 0
+        return self.crayons.count 
     }
 
     
@@ -46,14 +40,21 @@ class CrayonTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "crayonCell", for: indexPath)
 
         // Configure the cell...
-        if let crayonAtIndexPath: Crayon = self.crayonData?[indexPath.row] {
+        
+        let crayonAtIndexPath: Crayon = self.crayons[indexPath.row]
+                
             cell.textLabel?.text = crayonAtIndexPath.name
-//            cell.backgroundColor = 
-        }
+        
+            cell.backgroundColor = UIColor(red: CGFloat(crayonAtIndexPath.red), green: CGFloat(crayonAtIndexPath.green), blue: CGFloat(crayonAtIndexPath.blue), alpha: 1)
+        
         return cell
     }
     
-
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedColor = self.crayons[indexPath.row]
+        performSegue(withIdentifier: "colorChange", sender: selectedColor)
+    }
+    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -93,10 +94,18 @@ class CrayonTableViewController: UITableViewController {
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
+    
+//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        let selectedColor = self.crayonData?[indexPath.row]
+//        
+//    }
+    
+    
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "colorChange" {
             if let destination = segue.destination as? CrayonViewController {
-                print("This Works")
+                destination.detailCrayonData = sender as? Crayon
             }
         }
     

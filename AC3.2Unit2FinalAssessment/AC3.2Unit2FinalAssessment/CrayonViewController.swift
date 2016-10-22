@@ -11,19 +11,23 @@ import UIKit
 class CrayonViewController: UIViewController {
 
     @IBOutlet weak var colorWord: UILabel!
-    var crayonData: [Crayon]?
+    
+    var detailCrayonData: Crayon?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        if let color = detailCrayonData {
+        
+        colorWord.text = color.name
+            if color.name == "Black" {
+                colorWord.textColor = UIColor.white
+            }
+            
+        self.view.backgroundColor = UIColor(displayP3Red: CGFloat(color.red), green: CGFloat(color.green), blue: CGFloat(color.blue), alpha: 1)
+        }
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
 
     /*
     // MARK: - Navigation

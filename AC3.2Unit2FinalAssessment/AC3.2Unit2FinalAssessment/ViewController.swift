@@ -8,34 +8,40 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-
+class ViewController: UIViewController, UITextFieldDelegate {
+    
+    @IBOutlet weak var inputTextField: UITextField!
     @IBOutlet weak var stepper: UIStepper!
-    @IBOutlet weak var label: UILabel!
-
-        override func viewDidLoad() {
+    @IBOutlet weak var slider: UISlider!
+    @IBOutlet weak var valueLabel: UILabel!
+    
+    override func viewDidLoad() {
         super.viewDidLoad()
+        inputTextField.delegate = self
+        // Do any additional setup after loading the view.
+    }
+    @IBAction func stepperTapped(_ sender: AnyObject) {
+        slider.value = Float(stepper.value)
+        inputTextField.text = "\(stepper.value)"
         
-            stepper.maximumValue = 100
-    
-        // Do any additional setup after loading the view, typically from a nib.
+        valueLabel.text = "\(stepper.value)"
     }
-
-    @IBAction func stepperChanged(_ sender: UIStepper) {
-    label.text = Int(sender.value).description
-    
-    }
-    
     @IBAction func sliderChanged(_ sender: UISlider) {
-    
-        let currentValue = Int(sender.value)
+        stepper.value = Double(slider.value)
         
-        label.text = "\(currentValue)"
-    
+        inputTextField.text = "\(slider.value)"
+        
+        valueLabel.text = "\(slider.value)"
     }
-    @IBAction func textField(_ sender: UITextField) {
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+        if let textFieldText = textField.text, let doubleText = Double(textFieldText), let floatText = Float(textFieldText) {
+            slider.value = floatText
+            stepper.value = doubleText
+            valueLabel.text = textFieldText
+        }
+        
+        return true
     }
 }
-
-
